@@ -5,14 +5,39 @@ package circelOfFifths;
 
 public class App {
 
-  private String tones = "cdefgab";
+  private String tones = "CDEFGAB";
+  private int[] sharps = new int[]{1,3,6,8,10};
 
   public int[] getFifths(int note){
-
+    return new int[]{};
   }
 
   public String noteToString(int note){
+    int octave = note/12; // integer divison gives rest of normal division
 
+    note = note % 12;
+
+    StringBuilder sb = new StringBuilder();
+    // write down the 12 cases for now (less error prone)
+    switch (note){
+      case 0: sb.append("C ");      break;
+      case 1: sb.append("C#/Db ");  break;
+      case 2: sb.append("D ");      break;
+      case 3: sb.append("D#/Eb ");  break;
+      case 4: sb.append("E ");      break;
+      case 5: sb.append("F ");      break;
+      case 6: sb.append("F#/Gb ");  break;
+      case 7: sb.append("G ");      break;
+      case 8: sb.append("G#/Ab ");  break;
+      case 9: sb.append("A ");      break;
+      case 10: sb.append("A#/Bb "); break;
+      case 11: sb.append("B ");     break;
+      // Technically not allowed to happen
+      default: System.err.println("Illegal note value");
+    }
+
+    sb.append(octave);
+    return sb.toString();
   }
 
   public static void main(String[] args) {

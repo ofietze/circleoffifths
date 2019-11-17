@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
+    @Test void testNoteToString() {
         App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+        assertEquals("C 0", classUnderTest.noteToString(0));
+        assertEquals("C#/Db 0", classUnderTest.noteToString(1));
+        assertEquals("C#/Db 1", classUnderTest.noteToString(13));
     }
 }
