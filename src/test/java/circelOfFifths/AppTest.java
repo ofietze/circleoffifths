@@ -9,8 +9,34 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest {
     @Test void testNoteToString() {
         App classUnderTest = new App();
-        assertEquals("C 0", classUnderTest.noteToString(0));
-        assertEquals("C#/Db 0", classUnderTest.noteToString(1));
-        assertEquals("C#/Db 1", classUnderTest.noteToString(13));
+        assertEquals("(C 0)", classUnderTest.noteToString(0));
+        assertEquals("(C#/Db 0)", classUnderTest.noteToString(1));
+        assertEquals("(C#/Db 1)", classUnderTest.noteToString(13));
+    }
+
+    @Test void testScaleToString() {
+        App classUnderTest = new App();
+        assertEquals("(C 0) (D 0) (E 0) (F 0) (G 0) (A 0) (B 0) ", classUnderTest.scaleToString(new int[]{0, 2, 4, 5, 7, 9, 11}));
+
+        assertEquals("(C 1) (D 1) (E 1) (F 1) (G 1) (A 1) (B 1) ", classUnderTest.scaleToString(new int[]{12, 14, 16, 17, 19, 21, 23}));
+    }
+
+    @Test void testCircleOfFifths() {
+        App classUnderTest = new App();
+        assertArrayEquals(new int[]{0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5}, classUnderTest.getCircleOfFifths(0));
+        assertArrayEquals(new int[]{6, 1, 8, 3, 10, 5, 0, 7, 2, 9, 4, 11}, classUnderTest.getCircleOfFifths(6));
+    }
+
+    @Test void testGetScale() {
+        App classUnderTest = new App();
+        assertArrayEquals(new int[]{0, 2, 4, 5, 7, 9, 11}, classUnderTest.getMajorScale(0));
+
+        assertArrayEquals(new int[]{18, 20, 22, 23, 25, 27, 29}, classUnderTest.getMajorScale(18));
+    }
+
+    @Test void testGetScaleAndPrint() {
+        App classUnderTest = new App();
+
+        assertEquals("(F#/Gb 1) (G#/Ab 1) (A#/Bb 1) (B 1) (C#/Db 2) (D#/Eb 2) (F 2) ", classUnderTest.scaleToString(classUnderTest.getMajorScale(18)));
     }
 }

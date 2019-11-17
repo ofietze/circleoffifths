@@ -7,17 +7,46 @@ public class App {
 
   private String tones = "CDEFGAB";
   private int[] sharps = new int[]{1,3,6,8,10};
+  private final int numOfNotes = 12;
 
-  public int[] getFifths(int note){
-    return new int[]{};
+  public int[] getCircleOfFifths(int note) {
+    int[] circle = new int[numOfNotes];
+
+    for (int i = 0; i < circle.length; i++) {
+      circle[i] = note;
+
+      note -=5;
+      if (note < 0) {
+        note = 12 + note;
+      }
+    }
+    return circle;
   }
 
-  public String noteToString(int note){
+  public int[] getMajorScale(int note) {
+    // TODO check if still in integer range for scale (note < 2^(31) - 1 - 11)
+    int[] scale = new int[7];
+
+    for (int i = 0; i < scale.length; i++) {
+      scale[i] = note;
+
+      // One Half step all other steps are whole steps
+      if (i == 2) {
+        note++;
+      } else{
+        note +=2;
+      }
+    }
+
+    return scale;
+  }
+
+  public String noteToString(int note) {
     int octave = note/12; // integer divison gives rest of normal division
 
     note = note % 12;
 
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder("(");
     // write down the 12 cases for now (less error prone)
     switch (note){
       case 0: sb.append("C ");      break;
@@ -37,6 +66,18 @@ public class App {
     }
 
     sb.append(octave);
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public String scaleToString(int[] scale) {
+    StringBuilder sb = new StringBuilder();
+
+    for (int i = 0; i < scale.length; i++) {
+      sb.append(noteToString(scale[i]));
+      sb.append(" ");
+    }
+  
     return sb.toString();
   }
 
