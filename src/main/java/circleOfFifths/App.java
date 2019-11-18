@@ -11,7 +11,7 @@ import java.io.IOException;
 public class App {
 
   private String tones = "CDEFGAB";
-  private int[] sharps = new int[]{1,3,6,8,10};
+  private int[] sharps = new int[]{1,3,6,8,10}; // all sharps are also flats
   private final int numOfNotes = 12;
 
   public int[] getCircleOfFifths(int note) {
@@ -42,7 +42,6 @@ public class App {
         note +=2;
       }
     }
-
     return scale;
   }
 
@@ -69,7 +68,6 @@ public class App {
       // Technically not allowed to happen
       default: System.err.println("Illegal note value");
     }
-
     sb.append(octave);
     sb.append(")");
     return sb.toString();
@@ -82,8 +80,16 @@ public class App {
       sb.append(noteToString(scale[i]));
       sb.append(" ");
     }
-
     return sb.toString();
+  }
+
+  public String[] scaleToStringArray(int[] scale) {
+    String[] arr = new String[scale.length];
+
+    for (int i = 0; i < arr.length; i++) {
+      arr[i] = noteToString(scale[i]);
+    }
+    return arr;
   }
 
   public String askForInput(String message) throws NullPointerException {
