@@ -25,20 +25,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-
 public class Gui extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private int width = 500;
     private int height = 500;
-    private int padding = 50;
+    private int padding = 10;
     private BufferedImage graphicsContext;
     private JPanel contentPanel = new JPanel();
     private JLabel contextRender;
-    private Stroke dashedStroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 2f, new float[] {3f, 3f}, 0f);
     private Stroke solidStroke = new BasicStroke(3.0f);
     private RenderingHints antialiasing;
-    private Random random = new Random();
+
+    private final int NUM_OF_NOTES = 12;
+    private final Point2D centerPoint = new Point2D.Double((double)width / 2 + padding, (double)height / 2 + padding);
+    private final double CIRCLE_RADIUS = (double)width / 2;
 
     public static void main(String[] args) {
         //you should always use the SwingUtilities.invodeLater() method
@@ -76,76 +77,35 @@ public class Gui extends JFrame {
         Graphics2D g2d = graphicsContext.createGraphics();
         g2d.setRenderingHints(antialiasing);
 
-        //Set up the font to print on the circles
-        Font font = g2d.getFont();
-        font = font.deriveFont(Font.BOLD, 20f);
-        g2d.setFont(font);
-
-        FontMetrics fontMetrics = g2d.getFontMetrics();
-
         //clear the background
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, graphicsContext.getWidth(), graphicsContext.getHeight());
 
         //set up the large circle
-        Point2D largeCircleCenter = new Point2D.Double((double)width / 2 + padding, (double)height / 2 + padding);
-        double largeCircleRadius = (double)width / 2;
-        Ellipse2D largeCircle = getCircleByCenter(largeCircleCenter, largeCircleRadius);
-
-        //here we build the small circle
-        Point2D smallCircleCenter = new Point2D.Double();
-        double smallCircleRadius = 15;
-        //we need to make certain it is confined inside the larger circle
-        //so we choose the following values carefully
-
-        //we want to go a random direction from the circle, so chose an
-        //angle randomly in any direction
-        double smallCenterVectorAngle = 30.0d;
-        //and we want to be a random distance from the center of the large circle, but
-        //we limit the distance based on the radius of the small circle to prevent it
-        //from appearing outside the large circle
-        double smallCenterVectorLength = random.nextDouble() * (largeCircleRadius - smallCircleRadius);
-        Line2D vectorToSmallCenter = getVector(largeCircleCenter, smallCenterVectorAngle, smallCenterVectorLength);
-        //the resulting end point of the vector is a random distance from the center of the large circle
-        //in a random direction, and guaranteed to not place the small circle outside the large
-        smallCircleCenter.setLocation(vectorToSmallCenter.getP2());
-        Ellipse2D smallCircle = getCircleByCenter(largeCircleCenter, smallCircleRadius);
+        Point2D centerPoint = new Point2D.Double((double)width / 2 + padding, (double)height / 2 + padding);
+        Ellipse2D largeCircle = getCircleByCenter(centerPoint, CIRCLE_RADIUS);
 
         //before we draw any of the circles or lines, set the clip to the large circle
         //to prevent drawing outside our boundaries
         g2d.setClip(largeCircle);
 
-
-
         //chose a random angle for the line through the center of the small circle
-        double angle = 30.0d;
-        //we create two lines that start at the center and go out at the angle in
-        //opposite directions. We use 2*largeCircleRadius to make certain they
-        //will be large enough to fill the circle, and the clip we set prevent stray
-        //marks outside the big circle
-        Line2D centerLine1 = getVector(largeCircleCenter, angle, largeCircleRadius * 2);
-        Line2D centerLine2 = getVector(largeCircleCenter, angle, -largeCircleRadius * 2);
+        double angle = 15.0d;
 
-        //fill the small circle with blue
         g2d.setColor(Color.BLUE);
-        // g2d.fill(smallCircle);
+        g2d.setStroke(solidStroke);
 
-        //draw the two center lines lines
-        g2d.setStroke(dashedStroke);
-        g2d.draw(centerLine1);
-        g2d.draw(centerLine2);
+        // Draw the lines for each key
+        Line2D[] centerLines = new Line2D[NUM_OF_NOTES];
+        for (Line2D line : centerLines) {
+          line = getVector(centerPoint, angle, CIRCLE_RADIUS * 2);
+          angle += 30;
+          g2d.draw(line);
+        }
 
-        //create and draw the black offset vector
-        Line2D normalVector = getVector(smallCircleCenter, angle + 90, largeCircleRadius * 2);
         g2d.setColor(Color.black);
-        // g2d.draw(normalVector);
 
-        //draw the offset vectors
-        g2d.setColor(new Color(0, 200, 0));
-        // g2d.draw(sightVector1);
-        // g2d.draw(sightVector2);
-
-
+        drawKeyStrings(g2d, 0);
         //we save the big circle for last, to cover up any stray marks under the stroke
         //of its perimeter. We also set the clip back to null to prevent the large circle
         //itselft from accidentally getting clipped
@@ -158,6 +118,34 @@ public class Gui extends JFrame {
         //force the container for the context to re-paint itself
         contextRender.repaint();
 
+    }
+
+    // Draws the keys in the circle of fifths starting with "key"
+    private void drawKeyStrings(Graphics2D g2d, int key) {
+      //Set up the font to print on the circles
+      Font font = g2d.getFont();
+      font = font.deriveFont(Font.BOLD, 20f);
+      g2d.setFont(font);
+
+      FontMetrics fontMetrics = g2d.getFontMetrics();
+
+      // Get circle of fifths from App
+      App app = new App();
+      String[] circleOfFifths = app.scaleToStringArray(app.getCircleOfFifths(key));
+
+      double textX = 0;
+      double textY = 0;
+      double angle = 540;
+      for (int i = 0; i < circleOfFifths.length; i++) {
+        Rectangle2D itemStringBounds = fontMetrics.getStringBounds(circleOfFifths[i], g2d);
+
+        // To go around the circle we draw a vector from the center to our current cell and use the end point to draw the text
+        Line2D vector = getVector(centerPoint, angle - 30 * i, CIRCLE_RADIUS-CIRCLE_RADIUS/5);
+        textX = vector.getP2().getX() - (itemStringBounds.getWidth() / 2);
+        textY = vector.getP2().getY() + (itemStringBounds.getHeight() / 2);
+
+        g2d.drawString(circleOfFifths[i], (float)textX, (float)textY);
+      }
     }
 
     private static Line2D getVector(Point2D start, double degrees, double length){
