@@ -33,7 +33,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'circelOfFifths.App'
+    mainClassName = 'circle.of.fifths.Gui'
 }
 
 test {
