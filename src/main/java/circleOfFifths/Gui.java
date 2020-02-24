@@ -105,7 +105,7 @@ public class Gui extends JFrame {
 
         g2d.setColor(Color.black);
 
-        drawKeyStrings(g2d, 0);
+        drawKeyStrings(g2d, (byte)0);
         //we save the big circle for last, to cover up any stray marks under the stroke
         //of its perimeter. We also set the clip back to null to prevent the large circle
         //itselft from accidentally getting clipped
@@ -117,11 +117,10 @@ public class Gui extends JFrame {
         g2d.dispose();
         //force the container for the context to re-paint itself
         contextRender.repaint();
-
     }
 
     // Draws the keys in the circle of fifths starting with "key"
-    private void drawKeyStrings(Graphics2D g2d, int key) {
+    private void drawKeyStrings(Graphics2D g2d, byte key) {
       //Set up the font to print on the circles
       Font font = g2d.getFont();
       font = font.deriveFont(Font.BOLD, 20f);
@@ -130,8 +129,8 @@ public class Gui extends JFrame {
       FontMetrics fontMetrics = g2d.getFontMetrics();
 
       // Get circle of fifths from App
-      App app = new App();
-      String[] circleOfFifths = app.scaleToStringArray(app.getCircleOfFifths(key));
+      Circle circle = new Circle(key);
+      String[] circleOfFifths = circle.toStringArray();
 
       double textX = 0;
       double textY = 0;
