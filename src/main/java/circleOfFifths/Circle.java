@@ -28,7 +28,7 @@ public class Circle {
   }
 
   public Scale getCircleOfFifths() {
-    return circleOfFifth
+    return circleOfFifths;
   }
 
   public String toString() {
