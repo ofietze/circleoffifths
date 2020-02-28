@@ -36,11 +36,11 @@ class ScaleTest {
     @Test void testMajorScale() {
         Scale mScale = new MajorScale((byte)0);
         Scale expected = new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11});
-        assertTrue(expected.equals(mScale));
+        assertEquals(expected, mScale);
 
         Scale expected2 = new Scale(new byte[]{18, 20, 22, 23, 25, 27, 29});
         MajorScale mScale2 = new MajorScale((byte)18);
-        assertTrue(expected2.equals(mScale2));
+        assertEquals(expected2, mScale2);
     }
 
     @Test void testGetScaleAndString() {
@@ -57,10 +57,10 @@ class ScaleTest {
 
     @Test void testScaleEquals() {
       Scale scale = new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11});
-      assertTrue(scale.equals( new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11})));
+      assertEquals(scale, new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11}));
 
       MajorScale majorScale = new MajorScale((byte)0);
-      assertTrue(scale.equals(majorScale));
+      assertEquals(scale, majorScale);
 
     }
 }
