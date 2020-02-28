@@ -54,8 +54,4 @@ public class Circle {
         if (s != null) return s;
         else throw new NullPointerException("Console string is null");
   }
-
-  public int parseNote(String noteString) {
-    return 0;
-  }
 }
