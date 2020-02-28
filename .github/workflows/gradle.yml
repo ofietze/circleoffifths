@@ -9,8 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK
-      uses: actions/setup-java@v6
+    - name: setup-java
+      uses: olafurpg/setup-scala@v6
 
     - name: Build with Gradle
       run: ./gradlew build
