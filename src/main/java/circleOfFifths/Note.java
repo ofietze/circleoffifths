@@ -1,19 +1,25 @@
 package circle.of.fifths;
+import java.lang.IllegalArgumentException;
 
 public class Note {
   private byte octave;
   // note from c-h only 0-11 are valid notes
   // sharps/flats are notes 1,3,6,8,10
   private byte note;
-  private static final byte DEFAULT_OCTVAVE = 3; // default to octave 3
+  private static final byte NOTES_IN_OCTAVE = 12;
 
   public Note(byte note) {
-    this(note, DEFAULT_OCTVAVE);
+    if (note < 0 || note > Byte.MAX_VALUE) throw new IllegalArgumentException("note value out of range");
+    this.note = (byte) (note % NOTES_IN_OCTAVE);
+    this.octave = (byte) (note / NOTES_IN_OCTAVE);
   }
 
   public Note (byte note, byte octave) {
+    this(note);
+
+    if (octave < 0) throw new IllegalArgumentException("octave value out of range");
+
     this.octave = octave;
-    this.note= note;
   }
 
   public byte getNoteVal() { return this.note; }
