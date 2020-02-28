@@ -43,7 +43,6 @@ class ScaleTest {
         assertTrue(expected2.equals(mScale2));
     }
 
-
     @Test void testGetScaleAndString() {
         MajorScale majorScale = new MajorScale((byte)18);
 
@@ -54,5 +53,14 @@ class ScaleTest {
         MajorScale majorScale = new MajorScale((byte)18);
 
         assertArrayEquals(new String[]{"(F#/Gb 1)", "(G#/Ab 1)", "(A#/Bb 1)", "(B 1)", "(C#/Db 2)", "(D#/Eb 2)", "(F 2)"}, majorScale.toStringArray());
+    }
+
+    @Test void testScaleEquals() {
+      Scale scale = new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11});
+      assertTrue(scale.equals( new Scale(new byte[]{0, 2, 4, 5, 7, 9, 11})));
+
+      MajorScale majorScale = new MajorScale((byte)0);
+      assertTrue(scale.equals(majorScale));
+
     }
 }
