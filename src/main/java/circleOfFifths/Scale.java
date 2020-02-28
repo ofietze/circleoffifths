@@ -49,6 +49,6 @@ public class Scale {
     if (!Scale.class.isAssignableFrom(obj.getClass())) return false;
 
     final Scale scale = (Scale) obj;
-    return this.key.equals(scale.getKey()) && this.notes.equals(scale.notes);
+    return this.key.equals(scale.getKey()) && this.notes.equals(scale.getNotes());
   }
 }
