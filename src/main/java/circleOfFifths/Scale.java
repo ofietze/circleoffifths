@@ -42,7 +42,13 @@ public class Scale {
     return arr;
   }
 
-  public boolean equals(Scale scale) {
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) return false;
+
+    if (!Scale.class.isAssignableFrom(obj.getClass())) return false;
+
+    final Scale scale = (Scale) obj;
     return this.key.equals(scale.getKey()) && this.notes.equals(scale.notes);
   }
 }

@@ -45,7 +45,13 @@ public class Note {
     return sb.toString();
   }
 
-  public boolean equals(Note note) {
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) return false;
+
+    if (!Note.class.isAssignableFrom(obj.getClass())) return false;
+
+    final Note note = (Note) obj;
     return this.octave == note.getOctave() && this.note == note.getNoteVal();
   }
 }
