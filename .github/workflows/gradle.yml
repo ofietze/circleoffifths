@@ -14,6 +14,3 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
-
-    - name: show failed tests
-      run : cat /home/runner/work/circleoffifths/circleoffifths/build/reports/tests/test/index.html
